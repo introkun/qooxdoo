@@ -501,7 +501,7 @@ html {
     -webkit-backface-visibility: hidden;
     -webkit-box-sizing: border-box;
     -webkit-transform: translate3d(0,0,0) rotate(0) scale(1);
-    position:absolute;
+    position: relative;
     left:0px;
     width: 100%;
 }

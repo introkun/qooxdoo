@@ -482,7 +482,6 @@ input[type="checkbox"]:checked {
 .popup {
   position: absolute;
   background-color: #a1a1a1;
-  display: none;
   width: auto;
   padding: 3px;
   border: 1px solid white;
