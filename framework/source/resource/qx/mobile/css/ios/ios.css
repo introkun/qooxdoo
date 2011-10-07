@@ -508,3 +508,28 @@ input[type="checkbox"]:checked {
 .splitPaneRight {
   
 }
+
+
+/*  POPUP  */
+
+.popup {
+  position: absolute;
+  background-color: #a1a1a1;
+  width: auto;
+  padding: 3px;
+  border: 1px solid white;
+  -webkit-border-radius: .3em;
+  z-index: 99;  
+}
+
+
+/*  DIALOG  */
+dialog {
+  position: fixed;
+  background-color: #a1a1a1;
+  display: none;
+  width: auto;
+  padding: 3px;
+  border: 1px solid white;
+  -webkit-border-radius: .3em;
+}

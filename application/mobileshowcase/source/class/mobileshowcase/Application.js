@@ -83,6 +83,7 @@ qx.Class.define("mobileshowcase.Application",
       // todo: tablet support
       if (tablet) {
         var splitPane = new qx.ui.mobile.container.SplitPane();
+        splitPane.setPopup(new qx.ui.mobile.dialog.Popup());
         this.getRoot().setLayout(new qx.ui.mobile.layout.VBox());
         this.getRoot().add(splitPane, {flex:1});
         splitPane.show();

@@ -45,15 +45,13 @@ qx.Class.define("qx.ui.mobile.container.SplitPane",
     this.base(arguments, layout || new qx.ui.mobile.layout.HBox());
     this.__left = this._createLeftContainer();
     this.add(this.__left);
-    
-    if (qx.bom.Viewport.isPortrait()) {
-      this.getPopup().add(this.__left);
-      this.getPopup().show();
-    }
 
     this.__right = this._createRightContainer();
     this.add(this.__right, {flex:1});
     qx.event.Registration.addListener(window, "orientationchange", this._onOrientationChange, this);
+    if (qx.bom.Viewport.isPortrait()) {
+      this.__showPaneInPopup(this.__left);
+    }
   },
 
 
@@ -80,11 +78,18 @@ qx.Class.define("qx.ui.mobile.container.SplitPane",
       return this.__popup;
     },
     
+    /**
+     * Set the popup used by this splipane to show the leftPane when ii gets hidden.
+     */
+    setPopup : function(popup)
+    {
+      this.__popup = popup;
+    },
+    
     
     _onOrientationChange : function(evt) {
       if (evt.isPortrait()) {
-        this.getPopup().add(this.__left);
-        this.getPopup().show();
+        this.__showPaneInPopup(this.__left);
       } else {
         this.addBefore(this.__left, this.__right);
         this.getPopup().hide();
@@ -95,6 +100,13 @@ qx.Class.define("qx.ui.mobile.container.SplitPane",
     _createLeftContainer : function() {
       return this.__createContainer("splitPaneLeft")
     },
+    
+   __showPaneInPopup : function(pane)
+   {
+     this.getPopup().add(pane);
+     this.getPopup().setAnchor(this.__right.getChildren()[0]._getBackButton());
+     this.getPopup().show();
+   },
 
 
     _createRightContainer : function() {

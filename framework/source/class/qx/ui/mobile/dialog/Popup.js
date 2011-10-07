@@ -163,6 +163,7 @@ qx.Class.define("qx.ui.mobile.dialog.Popup",
         this._updatePosition();
         this.__registerEventListener();
         this.base(arguments);
+        this._updatePosition();
       }
       this.__isShown = true;
     },
@@ -263,7 +264,10 @@ qx.Class.define("qx.ui.mobile.dialog.Popup",
     {
       this.removeWidget();
       this.__initializeChild(widget);
-      this._updatePosition();
+    },
+    
+    setAnchor : function(widget) {
+      this.__anchor = widget;
     },
     
     /**
