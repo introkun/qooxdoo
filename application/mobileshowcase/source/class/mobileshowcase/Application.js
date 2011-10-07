@@ -67,6 +67,8 @@ qx.Class.define("mobileshowcase.Application",
         Below is your actual application code...
       -------------------------------------------------------------------------
       */
+     
+     var tablet = true;
 
       // Create the pages
       var overview = new mobileshowcase.page.Overview();
@@ -77,14 +79,40 @@ qx.Class.define("mobileshowcase.Application",
       var form = new mobileshowcase.page.Form();
       var animation = new mobileshowcase.page.Animation();
       var animationLanding = new mobileshowcase.page.AnimationLanding();
-
+      
+      // todo: tablet support
+      if (tablet) {
+        var splitPane = new qx.ui.mobile.container.SplitPane();
+        this.getRoot().setLayout(new qx.ui.mobile.layout.VBox());
+        this.getRoot().add(splitPane, {flex:1});
+        splitPane.show();
+        splitPane.getLeft().add(overview);
+        splitPane.getRight().add(events);
+        splitPane.getRight().add(list);
+        splitPane.getRight().add(tab);
+        splitPane.getRight().add(toolbar);
+        splitPane.getRight().add(form);
+        splitPane.getRight().add(animation);
+        splitPane.getRight().add(animationLanding);  
+      }
 
       // Navigation
       var nm = qx.ui.mobile.navigation.Manager.getInstance();
+      
+      
+            // todo: tablet support
+      if (tablet) {
+        nm.onGet("/.*", function(data) {
+          overview.show();
+        },this);
+      }
+
+      
       nm.onGet("/", function(data) {
         overview.show(data.customData);
       },this);
-
+      
+      
       nm.onGet("/event", function(data)
       {
         events.show();

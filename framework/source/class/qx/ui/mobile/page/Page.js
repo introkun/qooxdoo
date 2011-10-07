@@ -114,10 +114,14 @@ qx.Class.define("qx.ui.mobile.page.Page",
     if (!layout) {
       this.setLayout(new qx.ui.mobile.layout.VBox());
     }
-    qx.ui.mobile.page.Page.getManager().add(this);
+
     this._resize();
     qx.event.Registration.addListener(window, "orientationchange", this._resize, this);
     qx.event.Registration.addListener(window, "resize", this._resize, this);
+
+    // Just for deprecation
+    // TODO: ADD deprecation warning
+    qx.core.Init.getApplication().getRoot().add(this);
   },
 
 
@@ -175,40 +179,6 @@ qx.Class.define("qx.ui.mobile.page.Page",
 
 
 
- /*
-  *****************************************************************************
-     STATICS
-  *****************************************************************************
-  */
-
-  statics :
-  {
-    __manager : null,
-
-    /**
-     * Returns the used page manager. The page manager is responsible for the
-     * page transition and calling the lifecycle methods of a page.
-     *
-     * @return {var} The used page manager.
-     */
-    getManager : function() {
-      return qx.ui.mobile.page.Page.__manager;
-    },
-
-
-    /**
-     * Sets the used page manager. The page manager is responsible for the
-     * page transition and calling the lifecycle methods of a page.
-     *
-     * @param manager {var} The manager to use.
-     */
-    setManager : function(manager) {
-      qx.ui.mobile.page.Page.__manager = manager;
-    }
-  },
-
-
-
 
  /*
   *****************************************************************************
@@ -233,19 +203,6 @@ qx.Class.define("qx.ui.mobile.page.Page",
         this._setStyle("height", window.innerHeight + "px");
       }
     },
-
-
-    // overridden
-    _applyId : function(value, old)
-    {
-      this.base(arguments, value, old);
-      if (old != null) {
-        qx.ui.mobile.page.Page.getManager().remove(old);
-      }
-
-      qx.ui.mobile.page.Page.getManager().add(this);
-    },
-
 
 
     /**
@@ -286,21 +243,24 @@ qx.Class.define("qx.ui.mobile.page.Page",
     menu : function() {
       this.fireEvent("menu");
     },
-
-
-    /**
-     * The show method displays the page. Depending on the used page manager,
-     * the transition is animated or not.
-     * The method calls the <code>show</code> method of
-     * the used page manager. See {@link qx.ui.mobile.page.manager.Simple#show}
-     * or {@link qx.ui.mobile.page.manager.Animation#show} for more information.
-     *
-     * @param data {var?null} The data that is used by the set page manager.
-     */
-    show : function(data)
+    
+    
+    // overridden
+    show : function(properties)
     {
-      qx.ui.mobile.page.Page.getManager().show(this, data);
+      this.initialize();
+      this.start();
+      this.base(arguments, properties);
     },
+    
+    
+    // overridden
+    exclude : function(properties)
+    {
+      this.stop();
+      this.base(arguments, properties);
+    },
+
 
     /*
     ---------------------------------------------------------------------------
@@ -460,29 +420,5 @@ qx.Class.define("qx.ui.mobile.page.Page",
     qx.event.Registration.removeListener(window, "orientationchange", this._resize, this);
     qx.event.Registration.removeListener(window, "resize", this._resize, this);
     this.__initialized = null;
-    if (!qx.core.ObjectRegistry.inShutDown)
-    {
-      if (this.getId()) {
-        qx.ui.mobile.page.Page.getManager().remove(this.getId());
-      }
-    }
-  },
-
-
-
-
- /*
-  *****************************************************************************
-     DEFER
-  *****************************************************************************
-  */
-
-  defer : function(statics)
-  {
-    if (qx.core.Environment.get("css.translate3d")) {
-      statics.setManager(new qx.ui.mobile.page.manager.Animation());
-    } else {
-      statics.setManager(new qx.ui.mobile.page.manager.Simple());
-    }
   }
 });

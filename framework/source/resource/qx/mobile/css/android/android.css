@@ -417,6 +417,7 @@ input[type="checkbox"]:checked {
   bottom: -100px;
 }
 
+/*  BLOCKER  */
 .blocker {
   display:none;
   position : absolute;
@@ -430,6 +431,8 @@ input[type="checkbox"]:checked {
   color: black;
 }
 
+
+/*  SPINNER  */
 .spinnerContainer {
   margin: 0 auto;
   height: 100%;
@@ -457,6 +460,25 @@ input[type="checkbox"]:checked {
 	}
 }
 
+
+/*  SPLITPANE  */
+
+.splitPane {
+  
+}
+
+.splitPaneLeft {
+  width : 250px;
+  border-right: 4px #6B6D6B solid;
+}
+
+.splitPaneRight {
+  
+}
+
+
+/*  POPUP  */
+
 .popup {
   position: absolute;
   background-color: #a1a1a1;
@@ -467,6 +489,8 @@ input[type="checkbox"]:checked {
   -webkit-border-radius: .3em;
 }
 
+
+/*  DIALOG  */
 dialog {
   position: fixed;
   background-color: #a1a1a1;

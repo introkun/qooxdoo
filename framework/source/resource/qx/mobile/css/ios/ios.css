@@ -451,6 +451,7 @@ input[type="checkbox"]:checked {
   bottom: -100px;
 }
 
+/*  BLOCKER  */
 .blocker {
   display:none;
   position : absolute;
@@ -464,6 +465,8 @@ input[type="checkbox"]:checked {
   color: black;
 }
 
+
+/*  SPINNER  */
 .spinnerContainer {
   margin: 0 auto;
   height: 100%;
@@ -489,4 +492,19 @@ input[type="checkbox"]:checked {
 	to {
 		-webkit-transform:rotate(360deg);
 	}
+}
+
+
+/*  SPLITPANE  */
+
+.splitPane {
+  
+}
+
+.splitPaneLeft {
+  width : 25%;
+}
+
+.splitPaneRight {
+  
 }

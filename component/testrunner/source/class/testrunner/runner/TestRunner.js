@@ -75,18 +75,73 @@ qx.Class.define("testrunner.runner.TestRunner", {
     
     _loadTests : function()
     {
-      if (qx.core.Environment.get("testrunner.testOrigin") == "iframe") {
-        // Load the tests from a standalone AUT
-        this.__iframe = this.view.getIframe();
-        qx.event.Registration.addListener(this.__iframe, "load", this._onLoadIframe, this);
-        var src = qx.core.Environment.get("qx.testPageUri");
-        src += "?testclass=" + this._testNameSpace;
-        this.setTestSuiteState("loading");
-        this.view.setAutUri(src);
+      switch(qx.core.Environment.get("testrunner.testOrigin"))
+      {
+        case "iframe":
+          // Load the tests from a standalone AUT
+          this.__iframe = this.view.getIframe();
+          qx.event.Registration.addListener(this.__iframe, "load", this._onLoadIframe, this);
+          var src = qx.core.Environment.get("qx.testPageUri");
+          src += "?testclass=" + this._testNameSpace;
+          this.setTestSuiteState("loading");
+          this.view.setAutUri(src);
+          break;
+        case "inline":
+          this._loadInlineTests();
+          break;
+        case "remote":
+          this._loadRemoteTests();
+          break;
       }
-      else {
-        this._loadInlineTests();
+    },
+    
+    
+    _loadRemoteTests : function()
+    {
+      var iframeSrc = "html/blank.html";
+      
+      this.__iframe = this.view.getIframe();
+      qx.event.Registration.addListener(this.__iframe, "load", this.__onLoadBlank, this);
+      qx.bom.Iframe.setSource(this.__iframe, iframeSrc);
+    },
+    
+    
+    __scriptUri : null,
+    setTestUri : function(uri) {
+      var scriptUri = this.__scriptUri = uri;
+      if (this.__loaded) {
+        var doc = qx.bom.Iframe.getDocument(this.__iframe);
+        var scriptLoader = new qx.io.ScriptLoader(doc);
+        scriptLoader.load(scriptUri, this.__onScriptLoaded, this);  
       }
+    },
+    
+    __loaded : false,
+    __onLoadBlank : function()
+    {
+      this.__loaded = true;
+      if (this.__scriptUri != null) {
+        this.setTestUri(this.__scriptUri);
+      }
+    },
+    
+    
+    __onScriptLoaded : function(status)
+    {
+      if (status !== "success") {
+        this.error("Couldn't load remote tests!");
+        return;
+      }
+      
+      var autWin = qx.bom.Iframe.getWindow(this.__iframe);
+      autWin.qx.$$loader.init();
+      var testLoader = this.loader = new autWin.testrunner.TestLoader();
+      // TODO: Get namespace from remote server
+      testLoader.setTestNamespace(this._testNameSpace);
+      
+      this._wrapAssertions(autWin);
+      this._getTestModel();
+      this._runTests();
     },
     
     

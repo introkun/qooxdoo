@@ -74,6 +74,7 @@ qx.Class.define("qx.test.mobile.MobileTestCase",
       if (!clazz._root)
       {
         clazz._root = new qx.ui.mobile.core.Root();
+        clazz._root.setLayout(null);
       }
 
       return clazz._root;

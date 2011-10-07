@@ -39,6 +39,9 @@ qx.Class.define("testrunner.GuiApplication",
 
   members :
   {
+    setTestUri : function(uri) {
+      this.runner.setTestUri(uri);
+    },
 
     main : function()
     {

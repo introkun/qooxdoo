@@ -120,6 +120,7 @@
         "uris"   :
         {
           "script"   : "script",
+          "resource" : "http://localhost/workspace/qx_trunk/component/testrunner/build/resource",
           "add-nocache-param" : false
         }
       },
@@ -279,7 +280,7 @@
         "uris" :
         {
            "script"  : "../script",
-          "resource" : "../resource"
+          "resource" : "http://localhost/workspace/qx_trunk/component/testrunner/build/resource"
         },
         "code" :
         {

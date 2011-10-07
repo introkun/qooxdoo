@@ -698,13 +698,23 @@ qx.Class.define("qx.ui.mobile.core.Widget",
         }
       }
 
-      child.setLayoutParent(this);
-      child.setLayoutProperties(layoutProperties);
+      this._initializeChildLayout(child, layoutProperties);
 
       this.getContentElement().appendChild(child.getContainerElement());
       this.__children.push(child);
 
       this._domUpdated();
+    },
+    
+    
+    _initializeChildLayout : function(child, layoutProperties)
+    {
+      child.setLayoutParent(this);
+      child.setLayoutProperties(layoutProperties);
+      var layout = this._getLayout();
+      if (layout) {
+        layout.connectToChildWidget(child);  
+      }
     },
 
 
@@ -731,9 +741,8 @@ qx.Class.define("qx.ui.mobile.core.Widget",
         return;
       }
 
-      child.setLayoutParent(this);
-      child.setLayoutProperties(layoutProperties);
-
+      this._initializeChildLayout(child, layoutProperties);
+      
       this.getContentElement().insertBefore(child.getContainerElement(), beforeWidget.getContainerElement());
       qx.lang.Array.insertBefore(this.__children, child, beforeWidget);
 
@@ -763,8 +772,7 @@ qx.Class.define("qx.ui.mobile.core.Widget",
         return;
       }
 
-      child.setLayoutParent(this);
-      child.setLayoutProperties(layoutProperties);
+      this._initializeChildLayout(child, layoutProperties);
 
       var length = this._getChildren().length;
       var index = this._indexOf(afterWidget);
@@ -878,6 +886,10 @@ qx.Class.define("qx.ui.mobile.core.Widget",
     {
       qx.lang.Array.remove(this.__children, child);
       this.getContentElement().removeChild(child.getContainerElement());
+      var layout = this._getLayout(); 
+      if (layout) {
+        layout.disconnectFromChildWidget(child);  
+      }
     },
 
 
@@ -936,6 +948,10 @@ qx.Class.define("qx.ui.mobile.core.Widget",
 
       if (this.__layoutManager) {
         this.__layoutManager.connectToWidget(null);
+        for (var i=0; i < length; i++) {
+          var child = this._getChildren()[i];
+          this.__layoutManager.disconnectFromChildWidget(child);
+        }
       }
 
       if (layout) {
@@ -962,9 +978,6 @@ qx.Class.define("qx.ui.mobile.core.Widget",
      */
     setLayoutProperties : function(properties)
     {
-      if (properties == null) {
-        return;
-      }
       // Check values through parent
       var parent = this.getLayoutParent();
       if (parent) {
@@ -1192,7 +1205,7 @@ qx.Class.define("qx.ui.mobile.core.Widget",
       }
       else if(value == "visible")
       {
-        this._setStyle("display", "block");
+        this._setStyle("display", null);
         this._setStyle("visibility", "visible");
       }
       else if (value == "hidden") {
@@ -1206,8 +1219,9 @@ qx.Class.define("qx.ui.mobile.core.Widget",
      *
      * @return {void}
      */
-    show : function() {
-      this.setVisibility("visible");
+    show : function(properties) {
+      this.__setVisibility("visible", properties);
+     
     },
 
 
@@ -1216,8 +1230,8 @@ qx.Class.define("qx.ui.mobile.core.Widget",
      *
      * @return {void}
      */
-    hide : function() {
-      this.setVisibility("hidden");
+    hide : function(properties) {
+      this.__setVisibility("hidden", properties);
     },
 
 
@@ -1226,8 +1240,26 @@ qx.Class.define("qx.ui.mobile.core.Widget",
      *
      * @return {void}
      */
-    exclude : function() {
-      this.setVisibility("excluded");
+    exclude : function(properties) {
+      this.__setVisibility("excluded", properties);
+    },
+    
+    
+    __setVisibility : function(value, properties) {
+      this.setVisibility(value);
+
+      var parent = this.getLayoutParent();
+      if (parent) {
+        parent.updateLayout(this, value, properties);
+      }
+    },
+    
+    
+    updateLayout : function(widget, value, properties) {
+      var layout = this._getLayout();
+      if (layout) {
+        layout.updateLayout(widget, value, properties);
+      }  
     },
 
 

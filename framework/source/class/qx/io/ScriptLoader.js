@@ -27,10 +27,11 @@
  */
 qx.Bootstrap.define("qx.io.ScriptLoader",
 {
-  construct : function()
+  construct : function(doc)
   {
     this.__oneventWrapped = qx.Bootstrap.bind(this.__onevent, this);
-    this.__elem = document.createElement("script");
+    this.__doc = doc || document;
+    this.__elem = this.__doc.createElement("script");
   },
 
   statics :
@@ -63,6 +64,8 @@ qx.Bootstrap.define("qx.io.ScriptLoader",
     __elem : null,
 
 
+    __doc : null,
+
     /**
      * Loads the script from the given URL. It is possible to define
      * a callback and a context in which the callback is executed.
@@ -90,7 +93,7 @@ qx.Bootstrap.define("qx.io.ScriptLoader",
       this.__disposed = false;
 
       // Place script element into head
-      var head = document.getElementsByTagName("head")[0];
+      var head = this.__doc.getElementsByTagName("head")[0];
 
       // Create script element
       var script = this.__elem;
