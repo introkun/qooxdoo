@@ -419,7 +419,6 @@ input[type="checkbox"]:checked {
 
 /*  BLOCKER  */
 .blocker {
-  display:none;
   position : absolute;
   z-index:100;
   width:100%;
@@ -491,10 +490,9 @@ input[type="checkbox"]:checked {
 
 
 /*  DIALOG  */
-dialog {
+.dialog {
   position: fixed;
   background-color: #a1a1a1;
-  display: none;
   width: auto;
   padding: 3px;
   border: 1px solid white;

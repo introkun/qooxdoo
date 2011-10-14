@@ -629,3 +629,7 @@ html {
   opacity: 0.35;
   cursor: default;
 }
+
+.transparent {
+  opacity: 0 !important;
+}
