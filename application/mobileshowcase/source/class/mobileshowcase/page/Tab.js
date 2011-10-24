@@ -36,6 +36,8 @@ qx.Class.define("mobileshowcase.page.Tab",
 
   members :
   {
+  
+    __atom: null,
     // overridden
     _initialize : function()
     {
@@ -78,16 +80,19 @@ qx.Class.define("mobileshowcase.page.Tab",
      */
     __createView : function(text)
     {
-      var label = new qx.ui.mobile.basic.Label(text);
-      this.getContent().add(label);
-      return label;
+      //var label = new qx.ui.mobile.basic.Label(text);
+      //this.getContent().add(label);
+      var atom = this.__atom = new qx.ui.mobile.basic.Atom(text, "http://demo.qooxdoo.org/1.4/demobrowser/resource/qx/icon/Tango/32/actions/go-previous.png");
+      this.getContent().add(atom);
+      return atom;
     },
 
 
     // overridden
     _back : function()
     {
-     qx.ui.mobile.navigation.Manager.getInstance().executeGet("/", {reverse:true});
+     //qx.ui.mobile.navigation.Manager.getInstance().executeGet("/", {reverse:true});
+     this.__atom.setIconPosition("bottom");
     }
   }
 });
