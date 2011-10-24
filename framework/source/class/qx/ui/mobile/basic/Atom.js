@@ -206,9 +206,7 @@ qx.Class.define("qx.ui.mobile.basic.Atom",
       }
       else
       {
-        this.__label = new qx.ui.mobile.basic.Label(value);
-        this.__label.setAnonymous(true);
-        this.__label.setWrap(false);
+        this.__label = this.__createLabelWidget(value);
         var iconFirst = [ "top", "left" ].indexOf(this.getIconPosition()) != -1;
         if(iconFirst) {
           this.__childrenContainer._addAfter(this.__label, this.__icon);
@@ -226,8 +224,7 @@ qx.Class.define("qx.ui.mobile.basic.Atom",
       }
       else
       {
-        this.__icon = new qx.ui.mobile.basic.Image(value);
-        this.__icon.setAnonymous(true);
+        this.__icon = this.__createIconWidget(value);
         var iconFirst = [ "top", "left" ].indexOf(this.getIconPosition()) != -1;
         if(iconFirst) {
           this.__childrenContainer._addBefore(this.__icon, this.__label);
@@ -244,6 +241,23 @@ qx.Class.define("qx.ui.mobile.basic.Atom",
     getLabelWidget : function() {
       return this.__label;
     },
+    
+    __createIconWidget : function(iconURL)
+    {
+      var iconWidget = new qx.ui.mobile.basic.Image(iconURL);
+      iconWidget.setAnonymous(true);
+      iconWidget._setStyle('verticalAlign', 'middle');
+      return iconWidget;
+    },
+    
+    __createLabelWidget : function(label)
+    {
+      var labelWidget = new qx.ui.mobile.basic.Label(label);
+      labelWidget.setAnonymous(true);
+      labelWidget.setWrap(false);
+      labelWidget._setStyle('display', 'inline');
+      return labelWidget;
+    },
 
     /**
      *
@@ -256,15 +270,12 @@ qx.Class.define("qx.ui.mobile.basic.Atom",
     __createChildren : function(label, icon) {
       if(label)
       {
-        this.__label = new qx.ui.mobile.basic.Label(label);
-        this.__label.setAnonymous(true);
-        this.__label.setWrap(false);
+        this.__label = this.__createLabelWidget(label);
         this.setLabel(label);
       }
       if(icon)
       {
-        this.__icon = new qx.ui.mobile.basic.Image(icon);
-        this.__icon.setAnonymous(true);
+        this.__icon = this.__createIconWidget(icon);
         this.setIcon(icon);
       }
       var verticalLayout = [ "top", "bottom" ].indexOf(this.getIconPosition()) != -1;
